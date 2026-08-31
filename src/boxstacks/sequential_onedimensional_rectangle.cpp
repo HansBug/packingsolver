@@ -1277,8 +1277,8 @@ const SequentialOneDimensionalRectangleOutput boxstacks::sequential_onedimension
             fixed_items_solutions_pos_lower_bound = fixed_items_solutions_pos + 1;
             fixed_items_solutions_pos = 0;
             for (ItemPos pos = 0; pos < (ItemPos)fixed_items_solutions.size(); ++pos) {
-                if (pos + 1 < (ItemPos)fixed_items_solutions.size()
-                        && fixed_items_solutions[pos + 1].x_max() > xi - x_max)
+                if (pos + 1 >= (ItemPos)fixed_items_solutions.size()
+                        || fixed_items_solutions[pos + 1].x_max() > xi - x_max)
                     break;
                 //std::cout << "pos " << pos << " x " << fixed_items_x[pos] << " " << fixed_items_x[pos + 1] << std::endl;
                 fixed_items_solutions_pos++;
