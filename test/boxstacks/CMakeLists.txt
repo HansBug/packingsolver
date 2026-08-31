@@ -1,6 +1,7 @@
 add_executable(PackingSolver_boxstacks_test)
 target_sources(PackingSolver_boxstacks_test PRIVATE
     boxstacks_test.cpp
+    axle_weight_test.cpp
     optimize_test.cpp)
 target_include_directories(PackingSolver_boxstacks_test PRIVATE
     ${PROJECT_SOURCE_DIR}/src)
