@@ -54,6 +54,11 @@ struct SemiTrailerTruckData
     {
         if (!is)
             return {0, 0};
+        // Both axle weights are computed from 'harness_weight', which divides
+        // by 'harness_rear_axle_distance', so without that distance neither
+        // axle weight can be computed and neither axle is constrained.
+        if (harness_rear_axle_distance <= 0)
+            return {0, 0};
         double stacks_gravity_center_trailer_start_distance  // eje
             = weight_weighted_sum
             / weight;  // tmt
@@ -78,12 +83,17 @@ struct SemiTrailerTruckData
             = weight  // tmt
             + empty_trailer_weight  // EM
             - harness_weight;  // emh
-        double middle_axle_weight  // emm
-            = (tractor_weight  // CM
-                    * front_axle_tractor_gravity_center_distance  // CJfc
-                    + harness_weight  // emh
-                    * front_axle_harness_distance)  // CJfh
-            / front_axle_middle_axle_distance; // CJfm
+        // Likewise, without 'front_axle_middle_axle_distance' the middle axle
+        // weight cannot be computed, so only the rear axle is constrained.
+        double middle_axle_weight = 0;  // emm
+        if (front_axle_middle_axle_distance > 0) {
+            middle_axle_weight
+                = (tractor_weight  // CM
+                        * front_axle_tractor_gravity_center_distance  // CJfc
+                        + harness_weight  // emh
+                        * front_axle_harness_distance)  // CJfh
+                / front_axle_middle_axle_distance; // CJfm
+        }
         return {middle_axle_weight, rear_axle_weight};
     }
 
